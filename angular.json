@@ -244,7 +244,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:browser",
           "options": {
             "outputPath": "dist/dashboard",
             "index": "projects/dashboard/src/index.html",
@@ -259,7 +259,9 @@
             "styles": [
               "projects/dashboard/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extraWebpackConfig": "projects/dashboard/webpack.config.js",
+            "commonChunk": false
           },
           "configurations": {
             "production": {
@@ -281,7 +283,8 @@
                   "with": "projects/dashboard/src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "extraWebpackConfig": "projects/dashboard/webpack.prod.config.js"
             },
             "development": {
               "buildOptimizer": false,
@@ -295,25 +298,31 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "dashboard:build:production"
+              "browserTarget": "dashboard:build:production",
+              "extraWebpackConfig": "projects/dashboard/webpack.prod.config.js"
             },
             "development": {
               "browserTarget": "dashboard:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "extraWebpackConfig": "projects/dashboard/webpack.config.js",
+            "port": 4000
+          }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "ngx-build-plus:extract-i18n",
           "options": {
-            "browserTarget": "dashboard:build"
+            "browserTarget": "dashboard:build",
+            "extraWebpackConfig": "projects/dashboard/webpack.config.js"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "ngx-build-plus:karma",
           "options": {
             "main": "projects/dashboard/src/test.ts",
             "polyfills": "projects/dashboard/src/polyfills.ts",
@@ -327,7 +336,8 @@
             "styles": [
               "projects/dashboard/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "extraWebpackConfig": "projects/dashboard/webpack.config.js"
           }
         }
       }
