@@ -9,45 +9,34 @@ sharedMappings.register(
   [/* mapped paths to share */]);
 
 module.exports = {
-  output: {
-    uniqueName: "dashboard",
-    publicPath: "auto"
-  },
-  optimization: {
-    runtimeChunk: false
-  },   
-  resolve: {
-    alias: {
-      ...sharedMappings.getAliases(),
-    }
-  },
-  plugins: [
-    new ModuleFederationPlugin({
-      
-        // For remotes (please adjust)
-        // name: "dashboard",
-        // filename: "remoteEntry.js",
-        // exposes: {
-        //     './Component': './projects/dashboard/src/app/app.component.ts',
-        // },        
-        
-        // For hosts (please adjust)
-        // remotes: {
-        //     "shell": "shell@http://localhost:5000/remoteEntry.js",
-        //     "admin": "admin@http://localhost:3000/remoteEntry.js",
+    output: {
+        uniqueName: 'dashboard',
+        publicPath: 'auto'
+    },
+    optimization: {
+        runtimeChunk: false
+    },
+    resolve: {
+        alias: {
+            ...sharedMappings.getAliases()
+        }
+    },
+    plugins: [
+        new ModuleFederationPlugin({
+            name: 'dashboard',
+            filename: 'remoteEntry.js',
+            exposes: {
+                './Module': './projects/dashboard/src/app/app.module.ts'
+            },
+            shared: share({
+                '@angular/core': { singleton: true, strictVersion: true },
+                '@angular/common': { singleton: true, strictVersion: true },
+                '@angular/common/http': { singleton: true, strictVersion: true },
+                '@angular/router': { singleton: true, strictVersion: true },
 
-        // },
-
-        shared: share({
-          "@angular/core": { singleton: true, strictVersion: true, requiredVersion: 'auto' }, 
-          "@angular/common": { singleton: true, strictVersion: true, requiredVersion: 'auto' }, 
-          "@angular/common/http": { singleton: true, strictVersion: true, requiredVersion: 'auto' }, 
-          "@angular/router": { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-
-          ...sharedMappings.getDescriptors()
-        })
-        
-    }),
-    sharedMappings.getPlugin()
-  ],
+                ...sharedMappings.getDescriptors()
+            })
+        }),
+        sharedMappings.getPlugin()
+    ]
 };
